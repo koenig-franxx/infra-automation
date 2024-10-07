@@ -2,17 +2,22 @@
 variable "pm_api_token_id" {
   description = "Token id para conectar con Proxmox"
   type        = string
-  default     = "terraform-prov@pve!o2"
+  default     = "root@pam!diego"
 }
 variable "pm_api_token_secret"{
   description = "Token id secret para conectar con proxmox"
   type        = string
-  default     = "8d0e14fb-9a30-41f9-9ba9-daed77b2903a"
+  default     = "6279eaab-b69d-4356-ba56-de4ff215157c"
 }
 variable "pm_tls_insecure"{
   description = "Para conectar con proxmox sin certificado SSL"
   type        = string
   default     = true
+}
+variable "pm_api_url"{
+  description = "URL para conectar con proxmox"
+  type        = string
+  default     = "https://192.168.0.10:8006/api2/json"
 }
 #################################################################################################
 variable "aws_instance_types" {
