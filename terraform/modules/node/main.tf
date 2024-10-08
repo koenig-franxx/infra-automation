@@ -15,17 +15,11 @@ resource "proxmox_vm_qemu" "my_vm" {
  clone = var.vm_clone_template
  cores      = var.aws_instance_types[var.aws_instance_type].cores
  memory     = var.aws_instance_types[var.aws_instance_type].memory
- scsihw   = "virtio-scsi-pci"  # Controlador SCSI para mayor rendimiento
- bootdisk = "scsi0"
- ciuser = "admin"
- cipassword = "admin"
-   # Configuración del disco
-  #disk {
-  #  size    = var.aws_instance_types[var.aws_instance_type].disk_size  # Tamaño del disco
-  #  type    = "disk"           # Tipo de disco (VirtIO o SCSI es más eficiente para VMs)
-  #  storage = var.vm_storage   # Almacenamiento donde se alojará el disco
-  #  slot    = "sata0"          # Ubicación del disco (slot 0)
- # #}
+ scsihw   = var.vm_scsihw  # Controlador SCSI para mayor rendimiento
+ bootdisk = var.vm_bootdisk
+ ciuser = var.vm_ciuser
+ cipassword = var.vm_cipassword  
+
  disks {
     ide {
         ide2 {

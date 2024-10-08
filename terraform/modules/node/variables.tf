@@ -122,3 +122,27 @@ variable "vm_ipconfig0" {
   type        = string
   default     = "ip=dhcp"
 }
+
+variable "vm_scsihw" {
+  description = "Controlador SCSI para mayor rendimiento"
+  type        = string
+  default     = "virtio-scsi-pci"
+}
+
+variable "vm_bootdisk" {
+  description = "Escoger disco de arranque"
+  type        = string
+  default     = "scsi0"
+}
+
+variable "vm_ciuser" {
+  description = "Nombre de usuario Cloud Init"
+  type        = string
+  default     = "admin"
+}
+
+variable "vm_cipassword" {
+  description = "Password de usuario cloud init"
+  type        = string
+  default     = "admin"
+}

@@ -1,0 +1,28 @@
+---
+- name: Configuración de Nginx
+  hosts: web
+  become: yes
+
+  tasks:
+    - name: Update and upgrade apt packages
+      apt:
+        update_cache: yes
+        upgrade: yes
+
+    - name: Nginx última versión
+      apt:
+        name: nginx
+        state: latest
+
+    - name: Start nginx
+      service:
+        name: nginx
+        state: started
+
+    - name: Escribir el archivo index.html para NGINX
+      template:
+        src: /home/debian/index.html.j2  # Ruta a la plantilla
+        dest: /var/www/html/index.html  # Ruta de destino en el servidor NGINX
+        owner: www-data  # Usuario propietario del archivo
+        group: www-data  # Grupo propietario del archivo
+        mode: '0644'     # Permisos del archivo
