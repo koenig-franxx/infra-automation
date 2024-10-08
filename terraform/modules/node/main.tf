@@ -11,7 +11,7 @@ resource "proxmox_vm_qemu" "my_vm" {
  desc        = "${var.vm_clone_template}-${count.index + 1}"
  target_node = var.vm_target_node
  sshkeys = var.vm_ssh_key
- agent = 1
+ agent = 0
  clone = var.vm_clone_template
  cores      = var.aws_instance_types[var.aws_instance_type].cores
  memory     = var.aws_instance_types[var.aws_instance_type].memory
@@ -20,17 +20,40 @@ resource "proxmox_vm_qemu" "my_vm" {
  ciuser = "admin"
  cipassword = "admin"
    # Configuración del disco
-  disk {
-    size    = var.aws_instance_types[var.aws_instance_type].disk_size  # Tamaño del disco
-    type    = "disk"           # Tipo de disco (VirtIO o SCSI es más eficiente para VMs)
-    storage = var.vm_storage   # Almacenamiento donde se alojará el disco
-    slot    = "sata0"          # Ubicación del disco (slot 0)
-  }
+  #disk {
+  #  size    = var.aws_instance_types[var.aws_instance_type].disk_size  # Tamaño del disco
+  #  type    = "disk"           # Tipo de disco (VirtIO o SCSI es más eficiente para VMs)
+  #  storage = var.vm_storage   # Almacenamiento donde se alojará el disco
+  #  slot    = "sata0"          # Ubicación del disco (slot 0)
+ # #}
+ disks {
+    ide {
+        ide2 {
+            cloudinit {
+                storage = var.vm_storage
+            }
+        }
+    }
+    scsi {
+        scsi0 {
+            disk {
+            format = "raw"
+            size = var.aws_instance_types[var.aws_instance_type].disk_size
+            storage  = var.vm_storage  
+            }
+        }
 
+    }
+}
   network {
     model  = var.vm_network_model          # Modelo de tarjeta de red (VirtIO para mejor rendimiento)
     bridge = var.vm_network_bridge         # Bridge de red (vmbr0 es el bridge por defecto)
   }
    # Habilitar DHCP para obtener una IP automáticamente
   ipconfig0 = var.vm_ipconfig0
+
+   # Habilitar tiempo de espera adicional para Cloud-Init
+  timeouts {
+    create = "30m"
+  }
 }
